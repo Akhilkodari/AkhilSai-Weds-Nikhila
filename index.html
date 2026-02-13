@@ -1,115 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nikhila ❤️ Akhil Sai | Feb 21 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { margin:0; font-family:Arial, sans-serif; background:#fff; color:#333; text-align:center; }
-    #banner {
-      position:fixed; top:0; left:0; right:0; background:red; color:white; padding:20px;
-      font-size:28px; font-weight:bold; z-index:1000; cursor:pointer;
-      animation: drop 1.2s ease-out; box-shadow:0 4px 10px rgba(0,0,0,0.4);
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0a0005;
+      color: #ffd700;
+      text-align: center;
+      overflow-x: hidden;
+      height: 100vh;
+      position: relative;
     }
-    @keyframes drop { from { transform:translateY(-100%); } to { transform:translateY(0); } }
 
-    #main { padding:120px 20px 40px; display:none; }
-    h1 { font-size:3.5em; color:#d63384; margin:0.3em 0; animation:fadeIn 2s; }
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    /* Cinematic Particle Background */
+    canvas#particles {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+    }
 
-    .scratch-container { margin:40px auto; position:relative; width:220px; height:220px; display:inline-block; }
-    canvas { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; border:3px solid #ccc; }
-    .under { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; background:#ffeb3b; color:#000; font-size:1.4em; font-weight:bold; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px; box-sizing:border-box; }
+    /* Curtain Background */
+    #curtain-bg {
+      position: fixed;
+      inset: 0;
+      background: url('https://thumbs.dreamstime.com/b/rich-red-velvet-curtains-gold-tassels-part-to-reveal-spotlighted-stage-elegant-backdrop-creates-dramatic-entrance-ideal-395716487.jpg') center/cover no-repeat;
+      z-index: -2;
+      filter: brightness(0.9) contrast(1.1);
+      animation: fadeCinematic 5s ease-in-out infinite alternate;
+    }
+    @keyframes fadeCinematic { from { opacity: 0.8; } to { opacity: 1; } }
 
-    #venue { margin:60px 0; font-size:2.8em; color:#b71c1c; background:#ffebee; padding:30px; border-radius:15px; }
-    #cartoon { margin:40px auto; max-width:320px; }
-    #cartoon img { max-width:100%; height:auto; }
-    button { font-size:1.3em; padding:15px 30px; background:#4caf50; color:white; border:none; border-radius:10px; cursor:pointer; margin-top:15px; }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, rgba(139,0,0,0.2), rgba(0,0,0,0.5));
+      z-index: -1;
+    }
+
+    /* Banner */
+    #banner {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .invitation-text {
+      max-width: 80%;
+      padding: 50px 40px;
+      background: rgba(139,0,0,0.4);
+      border-radius: 35px;
+      border: 4px solid #ffd700;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.7), inset 0 0 40px rgba(255,215,0,0.3);
+      backdrop-filter: blur(8px);
+      animation: cinematicGlow 4s ease-in-out infinite;
+    }
+    @keyframes cinematicGlow { 0%,100% { box-shadow: 0 15px 50px rgba(0,0,0,0.7); } 50% { box-shadow: 0 20px 60px rgba(255,0,0,0.5); } }
+    .invitation-text h1 { font-family: 'Great Vibes', cursive; font-size: 6em; color: #ffd700; text-shadow: 0 5px 25px #b22222; }
+    .invitation-text p { font-size: 2em; color: #fff; text-shadow: 0 3px 15px #000; }
+
+    /* Main Content */
+    #main {
+      padding: 100px 20px 80px;
+      display: none;
+      background: linear-gradient(to bottom, #fffaf0, #fff0f5);
+      color: #333;
+      box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
+    }
+
+    /* Vertical Scratch Cards */
+    .scratch-section {
+      margin: 80px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .scratch-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5em;
+      color: #8b0000;
+      margin-bottom: 50px;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+    }
+    .scratch-container {
+      margin: 40px 0;
+      width: 300px;
+      height: 300px;
+      position: relative;
+      border-radius: 50%;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3), inset 0 0 30px rgba(212,175,55,0.2);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .scratch-container:hover { transform: scale(1.05); }
+    .under {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(#fffacd, #ffd700);
+      color: #b22222;
+      font-family: 'Playfair Display', serif;
+      font-size: 5em;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 6px solid #d4af37;
+      box-shadow: inset 0 0 35px #b8860b;
+    }
+    canvas { position: absolute; inset: 0; border-radius: 50%; cursor: grab; }
+
+    /* Venue & Cartoon */
+    #venue {
+      font-family: 'Great Vibes', cursive;
+      font-size: 5em;
+      color: #8b0000;
+      background: linear-gradient(to right, #ffe4e1, #fff0f5);
+      padding: 50px;
+      border-radius: 40px;
+      border: 4px dashed #d4af37;
+      box-shadow: 0 15px 50px rgba(139,0,0,0.2);
+      margin: 90px 0;
+    }
+    #cartoon {
+      margin: 70px auto;
+      max-width: 450px;
+      position: relative;
+    }
+    #cartoon img {
+      max-width: 100%;
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: cinematicFloat 8s ease-in-out infinite;
+    }
+    @keyframes cinematicFloat { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-25px) rotate(1deg); } }
+    #cartoon p { font-size: 2em; margin: 25px 0 20px; color: #555; }
+    button {
+      font-size: 1.5em;
+      padding: 20px 50px;
+      background: linear-gradient(135deg, #ffd700, #b8860b);
+      color: #fff;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(212,175,55,0.5);
+      transition: all 0.4s;
+    }
+    button:hover { transform: scale(1.05); box-shadow: 0 12px 35px rgba(212,175,55,0.7); }
+    .rocket-icon { font-size: 1.2em; margin-left: 10px; } /* Elon/xAI fun touch */
   </style>
 </head>
 <body>
 
-<div id="banner" onclick="startReveal()">Tap / Click to Open Invitation</div>
+  <canvas id="particles"></canvas>
+  <div id="curtain-bg"></div>
+  <div class="overlay"></div>
 
-<div id="main">
-  <h1>Nikhila weds Akhil Sai</h1>
-  <p style="font-size:1.6em;">Save the Date!</p>
-
-  <div style="margin:60px 0;">
-    <h2>Scratch each circle to reveal the date</h2>
-    <div class="scratch-container">
-      <div class="under">Feb 21<br>2026</div>
-      <canvas id="c1"></canvas>
-    </div>
-    <div class="scratch-container">
-      <div class="under">Feb 21<br>2026</div>
-      <canvas id="c2"></canvas>
-    </div>
-    <div class="scratch-container">
-      <div class="under">Feb 21<br>2026</div>
-      <canvas id="c3"></canvas>
+  <div id="banner" onclick="startReveal()">
+    <div class="invitation-text">
+      <h1>Nikhila weds Akhil Sai</h1>
+      <p>Tap to Unveil the Magic</p>
     </div>
   </div>
 
-  <div id="venue">
-    NR Convention Hall
+  <div id="main">
+    <div class="scratch-section">
+      <h2>Scratch to Unveil the Date</h2>
+      <div class="scratch-container">
+        <div class="under">21</div>
+        <canvas id="c1"></canvas>
+      </div>
+      <div class="scratch-container">
+        <div class="under">Feb</div>
+        <canvas id="c2"></canvas>
+      </div>
+      <div class="scratch-container">
+        <div class="under">2026</div>
+        <canvas id="c3"></canvas>
+      </div>
+    </div>
+
+    <div id="venue">NR Convention Hall</div>
+
+    <div id="cartoon">
+      <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-wedding-couple-cartoon-png-image_3883434.jpg" alt="Creative Bride and Groom Cartoon">
+      <p>NR Convention Hall,<br>Subedari, Hanamkonda</p>
+      <button onclick="window.open('https://maps.app.goo.gl/EABWXEMB1S44eXdFA', '_blank')">Click for Map → <span class="rocket-icon">🚀</span></button>
+    </div>
+
+    <p style="margin-top: 120px; color: #777; font-style: italic;">With eternal love from the families of Nikhila & Akhil Sai</p>
   </div>
 
-  <div id="cartoon">
-    <!-- Replace with your cartoon image URL (free PNG with transparent bg) -->
-    <img src="https://www.shutterstock.com/image-vector/bride-bridegroom-holding-placard-text-do-287218874 " alt="Cartoon holding placard" />
-    <p style="font-size:1.8em; margin:10px 0;">NR Convention Hall,<br>Subedari, Hanamkonda</p>
-    <button onclick="window.open('https://maps.app.goo.gl/xkUAW65eECwgpzRVA','_blank')">Click me for Map →</button>
-  </div>
+  <script>
+    // Cinematic Particles (gold/red sparks)
+    const particleCanvas = document.getElementById('particles');
+    const pCtx = particleCanvas.getContext('2d');
+    particleCanvas.width = window.innerWidth;
+    particleCanvas.height = window.innerHeight;
+    const particles = [];
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * particleCanvas.width,
+        y: Math.random() * particleCanvas.height,
+        radius: Math.random() * 2 + 1,
+        color: Math.random() > 0.5 ? '#ffd700' : '#b22222',
+        speed: Math.random() * 0.5 + 0.1
+      });
+    }
+    function animateParticles() {
+      pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      particles.forEach(p => {
+        p.y += p.speed;
+        if (p.y > particleCanvas.height) p.y = 0;
+        pCtx.beginPath();
+        pCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        pCtx.fillStyle = p.color;
+        pCtx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
 
-  <p style="margin-top:80px; color:#777;">With love from families of Nikhila & Akhil Sai</p>
-</div>
+    // Reveal Function
+    function startReveal() {
+      document.getElementById('banner').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      confettiBurst();
+    }
 
-<script>
-// Hide banner & show content
-function startReveal() {
-  document.getElementById('banner').style.display = 'none';
-  document.getElementById('main').style.display = 'block';
-}
+    // Confetti (enhanced cinematic burst)
+    function confettiBurst() {
+      for (let i = 0; i < 150; i++) {
+        let conf = document.createElement('div');
+        conf.style.position = 'fixed';
+        conf.style.width = '14px';
+        conf.style.height = '14px';
+        conf.style.background = ['#ffd700', '#b22222', '#fff', '#d4af37', '#ff4500'][Math.floor(Math.random()*5)];
+        conf.style.left = Math.random()*100 + 'vw';
+        conf.style.top = '-30px';
+        conf.style.opacity = Math.random() * 0.9 + 0.1;
+        conf.style.pointerEvents = 'none';
+        conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        conf.style.boxShadow = '0 0 10px rgba(255,255,255,0.5)';
+        document.body.appendChild(conf);
+        conf.animate([
+          { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+          { transform: `translateY(${Math.random()*150 + 150}vh) rotate(${Math.random()*900 - 450}deg)`, opacity: 0 }
+        ], { duration: 4000 + Math.random()*2500, easing: 'ease-out' });
+        setTimeout(() => conf.remove(), 7000);
+      }
+    }
 
-// Scratch card logic (one function for all canvases)
-function initScratch(canvasId) {
-  const canvas = document.getElementById(canvasId);
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width = canvas.parentElement.offsetWidth;
-  const h = canvas.height = canvas.parentElement.offsetHeight;
+    // Scratch Function (with tap support)
+    function initScratch(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.offsetWidth;
+      const h = canvas.height = canvas.parentElement.offsetHeight;
 
-  // Fill scratch layer (silver/gray)
-  ctx.fillStyle = '#999';
-  ctx.fillRect(0,0,w,h);
-  ctx.globalCompositeOperation = 'destination-out'; // Erase mode
+      // High-quality grey metallic layer
+      const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w,h)/2);
+      grad.addColorStop(0, '#d0d0d0');
+      grad.addColorStop(0.3, '#b0b0b0');
+      grad.addColorStop(1, '#909090');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
 
-  let isDrawing = false;
+      // Enhanced noise for foil texture
+      ctx.globalAlpha = 0.2;
+      for (let i = 0; i < 1200; i++) {
+        ctx.fillStyle = Math.random() > 0.5 ? '#f0f0f0' : '#707070';
+        ctx.fillRect(Math.random()*w, Math.random()*h, 3, 3);
+      }
+      ctx.globalAlpha = 1;
 
-  function scratch(e) {
-    if (!isDrawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX || e.touches[0].clientX) - rect.left;
-    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+      ctx.globalCompositeOperation = 'destination-out';
 
-    ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI*2); // brush size ~25px
-    ctx.fill();
-  }
+      let isDrawing = false;
 
-  canvas.addEventListener('mousedown', () => isDrawing=true);
-  canvas.addEventListener('touchstart', () => isDrawing=true);
-  window.addEventListener('mouseup', () => isDrawing=false);
-  window.addEventListener('touchend', () => isDrawing=false);
+      function scratch(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        ctx.beginPath();
+        ctx.arc(x, y, 30, 0, Math.PI * 2); // Larger brush for quality feel
+        ctx.fill();
+      }
 
-  canvas.addEventListener('mousemove', scratch);
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); scratch(e); });
-}
+      canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+      window.addEventListener('mouseup', () => isDrawing = false);
+      window.addEventListener('touchend', () => isDrawing = false);
+      canvas.addEventListener('mousemove', scratch);
+      canvas.addEventListener('touchmove', e => { e.preventDefault(); scratch(e); });
+    }
 
-// Init all 3 scratch cards
-initScratch('c1');
-initScratch('c2');
-initScratch('c3');
-</script>
+    initScratch('c1');
+    initScratch('c2');
+    initScratch('c3');
+  </script>
 </body>
 </html>
