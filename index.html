@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nikhila ❤️ Akhil Sai | Feb 21 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Turn.js for book page-turn (free, add these CDNs) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://www.turnjs.com/lib/turn.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -17,18 +20,12 @@
       position: relative;
     }
 
-    /* Cinematic Particle Background */
-    canvas#particles {
-      position: fixed;
-      inset: 0;
-      z-index: -3;
-      pointer-events: none;
-    }
+    /* Cinematic Particles */
+    canvas#particles { position: fixed; inset: 0; z-index: -3; pointer-events: none; }
 
-    /* Curtain Background */
+    /* Curtain BG */
     #curtain-bg {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: url('https://thumbs.dreamstime.com/b/rich-red-velvet-curtains-gold-tassels-part-to-reveal-spotlighted-stage-elegant-backdrop-creates-dramatic-entrance-ideal-395716487.jpg') center/cover no-repeat;
       z-index: -2;
       filter: brightness(0.9) contrast(1.1);
@@ -36,28 +33,17 @@
     }
     @keyframes fadeCinematic { from { opacity: 0.8; } to { opacity: 1; } }
 
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle, rgba(139,0,0,0.2), rgba(0,0,0,0.5));
-      z-index: -1;
-    }
+    .overlay { position: fixed; inset: 0; background: radial-gradient(circle, rgba(139,0,0,0.2), rgba(0,0,0,0.5)); z-index: -1; }
 
     /* Banner */
     #banner {
       height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
     }
     .invitation-text {
-      max-width: 80%;
-      padding: 50px 40px;
-      background: rgba(139,0,0,0.4);
-      border-radius: 35px;
-      border: 4px solid #ffd700;
+      max-width: 80%; padding: 50px 40px;
+      background: rgba(139,0,0,0.4); border-radius: 35px; border: 4px solid #ffd700;
       box-shadow: 0 15px 50px rgba(0,0,0,0.7), inset 0 0 40px rgba(255,215,0,0.3);
       backdrop-filter: blur(8px);
       animation: cinematicGlow 4s ease-in-out infinite;
@@ -68,93 +54,58 @@
 
     /* Main Content */
     #main {
-      padding: 100px 20px 80px;
-      display: none;
+      padding: 100px 20px 80px; display: none;
       background: linear-gradient(to bottom, #fffaf0, #fff0f5);
-      color: #333;
-      box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
+      color: #333; box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
     }
 
-    /* Vertical Scratch Cards */
-    .scratch-section {
-      margin: 80px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* Flip Cards for Date Reveal (Vertical) */
+    .flip-section { margin: 80px 0; }
+    .flip-section h2 { font-family: 'Playfair Display', serif; font-size: 2.5em; color: #8b0000; margin-bottom: 50px; text-shadow: 1px 1px 5px rgba(0,0,0,0.2); }
+    .flip-card {
+      margin: 40px auto; width: 300px; height: 300px;
+      perspective: 1000px; /* 3D effect */
     }
-    .scratch-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5em;
-      color: #8b0000;
-      margin-bottom: 50px;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-    }
-    .scratch-container {
-      margin: 40px 0;
-      width: 300px;
-      height: 300px;
-      position: relative;
+    .flip-card-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform 0.8s; transform-style: preserve-3d;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
       border-radius: 50%;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.3), inset 0 0 30px rgba(212,175,55,0.2);
-      overflow: hidden;
-      transition: transform 0.3s;
     }
-    .scratch-container:hover { transform: scale(1.05); }
-    .under {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back {
+      position: absolute; width: 100%; height: 100%;
+      backface-visibility: hidden; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2em; color: #fff;
+    }
+    .flip-card-front {
+      background: radial-gradient(#c0c0c0, #a0a0a0);
+      box-shadow: inset 0 0 30px #d0d0d0;
+    }
+    .flip-card-back {
       background: radial-gradient(#fffacd, #ffd700);
-      color: #b22222;
-      font-family: 'Playfair Display', serif;
-      font-size: 5em;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 6px solid #d4af37;
+      color: #b22222; font-family: 'Playfair Display', serif; font-size: 5em; font-weight: 800;
+      transform: rotateY(180deg); border: 6px solid #d4af37;
       box-shadow: inset 0 0 35px #b8860b;
     }
-    canvas { position: absolute; inset: 0; border-radius: 50%; cursor: grab; }
+
+    /* Wedding Card Viewer */
+    #card-viewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+    #flipbook { width: 800px; height: 600px; background: #fff; box-shadow: 0 0 50px rgba(255,255,255,0.5); }
+    #flipbook .page { width: 400px; height: 600px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; }
+    #flipbook .page img { width: 100%; height: 100%; object-fit: cover; }
+    #close-card { position: absolute; top: 20px; right: 20px; font-size: 2em; color: #fff; cursor: pointer; }
 
     /* Venue & Cartoon */
-    #venue {
-      font-family: 'Great Vibes', cursive;
-      font-size: 5em;
-      color: #8b0000;
-      background: linear-gradient(to right, #ffe4e1, #fff0f5);
-      padding: 50px;
-      border-radius: 40px;
-      border: 4px dashed #d4af37;
-      box-shadow: 0 15px 50px rgba(139,0,0,0.2);
-      margin: 90px 0;
-    }
-    #cartoon {
-      margin: 70px auto;
-      max-width: 450px;
-      position: relative;
-    }
-    #cartoon img {
-      max-width: 100%;
-      border-radius: 30px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      animation: cinematicFloat 8s ease-in-out infinite;
-    }
+    #venue { font-family: 'Great Vibes', cursive; font-size: 5em; color: #8b0000; background: linear-gradient(to right, #ffe4e1, #fff0f5); padding: 50px; border-radius: 40px; border: 4px dashed #d4af37; box-shadow: 0 15px 50px rgba(139,0,0,0.2); margin: 90px 0; }
+    #cartoon { margin: 70px auto; max-width: 450px; position: relative; }
+    #cartoon img { max-width: 100%; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: cinematicFloat 8s ease-in-out infinite; }
     @keyframes cinematicFloat { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-25px) rotate(1deg); } }
     #cartoon p { font-size: 2em; margin: 25px 0 20px; color: #555; }
-    button {
-      font-size: 1.5em;
-      padding: 20px 50px;
-      background: linear-gradient(135deg, #ffd700, #b8860b);
-      color: #fff;
-      border: none;
-      border-radius: 60px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(212,175,55,0.5);
-      transition: all 0.4s;
-    }
+    button { font-size: 1.5em; padding: 20px 50px; background: linear-gradient(135deg, #ffd700, #b8860b); color: #fff; border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 8px 25px rgba(212,175,55,0.5); transition: all 0.4s; }
     button:hover { transform: scale(1.05); box-shadow: 0 12px 35px rgba(212,175,55,0.7); }
-    .rocket-icon { font-size: 1.2em; margin-left: 10px; } /* Elon/xAI fun touch */
+    .rocket-icon { font-size: 1.2em; margin-left: 10px; }
   </style>
 </head>
 <body>
@@ -171,35 +122,58 @@
   </div>
 
   <div id="main">
-    <div class="scratch-section">
-      <h2>Scratch to Unveil the Date</h2>
-      <div class="scratch-container">
-        <div class="under">21</div>
-        <canvas id="c1"></canvas>
+    <!-- Flip Cards Section -->
+    <div class="flip-section">
+      <h2>Tap Each Card to Reveal the Date</h2>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">Tap to Flip</div>
+          <div class="flip-card-back">Feb</div>
+        </div>
       </div>
-      <div class="scratch-container">
-        <div class="under">Feb</div>
-        <canvas id="c2"></canvas>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">Tap to Flip</div>
+          <div class="flip-card-back">21</div>
+        </div>
       </div>
-      <div class="scratch-container">
-        <div class="under">2026</div>
-        <canvas id="c3"></canvas>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">Tap to Flip</div>
+          <div class="flip-card-back">2026</div>
+        </div>
       </div>
     </div>
 
     <div id="venue">NR Convention Hall</div>
 
     <div id="cartoon">
-      <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-wedding-couple-cartoon-png-image_3883434.jpg" alt="Creative Bride and Groom Cartoon">
+      <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-wedding-couple-cartoon-png-image_3883434.jpg" alt="Creative Bride and Groom">
       <p>NR Convention Hall,<br>Subedari, Hanamkonda</p>
       <button onclick="window.open('https://maps.app.goo.gl/EABWXEMB1S44eXdFA', '_blank')">Click for Map → <span class="rocket-icon">🚀</span></button>
+      <button onclick="openCardViewer()" style="margin-top: 20px;">Tap to View Wedding Card</button>
     </div>
 
     <p style="margin-top: 120px; color: #777; font-style: italic;">With eternal love from the families of Nikhila & Akhil Sai</p>
   </div>
 
+  <!-- Wedding Card Viewer Modal -->
+  <div id="card-viewer" onclick="closeCardViewer()">
+    <div id="flipbook">
+      <div class="hard"></div> <!-- Cover -->
+      <div class="page">
+        <img src="page1.jpg" alt="Wedding Card Page 1"> <!-- Replace with your image URL -->
+      </div>
+      <div class="page">
+        <img src="page2.jpg" alt="Wedding Card Page 2"> <!-- Replace with your image URL -->
+      </div>
+      <div class="hard"></div> <!-- Back cover -->
+    </div>
+    <span id="close-card" onclick="closeCardViewer()">✕</span>
+  </div>
+
   <script>
-    // Cinematic Particles (gold/red sparks)
+    // Particles (same as before)
     const particleCanvas = document.getElementById('particles');
     const pCtx = particleCanvas.getContext('2d');
     particleCanvas.width = window.innerWidth;
@@ -228,25 +202,21 @@
     }
     animateParticles();
 
-    // Reveal Function
+    // Reveal
     function startReveal() {
       document.getElementById('banner').style.display = 'none';
       document.getElementById('main').style.display = 'block';
       confettiBurst();
     }
 
-    // Confetti (enhanced cinematic burst)
+    // Confetti (same)
     function confettiBurst() {
       for (let i = 0; i < 150; i++) {
         let conf = document.createElement('div');
-        conf.style.position = 'fixed';
-        conf.style.width = '14px';
-        conf.style.height = '14px';
+        conf.style.position = 'fixed'; conf.style.width = '14px'; conf.style.height = '14px';
         conf.style.background = ['#ffd700', '#b22222', '#fff', '#d4af37', '#ff4500'][Math.floor(Math.random()*5)];
-        conf.style.left = Math.random()*100 + 'vw';
-        conf.style.top = '-30px';
-        conf.style.opacity = Math.random() * 0.9 + 0.1;
-        conf.style.pointerEvents = 'none';
+        conf.style.left = Math.random()*100 + 'vw'; conf.style.top = '-30px';
+        conf.style.opacity = Math.random() * 0.9 + 0.1; conf.style.pointerEvents = 'none';
         conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
         conf.style.boxShadow = '0 0 10px rgba(255,255,255,0.5)';
         document.body.appendChild(conf);
@@ -258,53 +228,20 @@
       }
     }
 
-    // Scratch Function (with tap support)
-    function initScratch(canvasId) {
-      const canvas = document.getElementById(canvasId);
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width = canvas.parentElement.offsetWidth;
-      const h = canvas.height = canvas.parentElement.offsetHeight;
-
-      // High-quality grey metallic layer
-      const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w,h)/2);
-      grad.addColorStop(0, '#d0d0d0');
-      grad.addColorStop(0.3, '#b0b0b0');
-      grad.addColorStop(1, '#909090');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, w, h);
-
-      // Enhanced noise for foil texture
-      ctx.globalAlpha = 0.2;
-      for (let i = 0; i < 1200; i++) {
-        ctx.fillStyle = Math.random() > 0.5 ? '#f0f0f0' : '#707070';
-        ctx.fillRect(Math.random()*w, Math.random()*h, 3, 3);
-      }
-      ctx.globalAlpha = 1;
-
-      ctx.globalCompositeOperation = 'destination-out';
-
-      let isDrawing = false;
-
-      function scratch(e) {
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
-        ctx.beginPath();
-        ctx.arc(x, y, 30, 0, Math.PI * 2); // Larger brush for quality feel
-        ctx.fill();
-      }
-
-      canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
-      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
-      window.addEventListener('mouseup', () => isDrawing = false);
-      window.addEventListener('touchend', () => isDrawing = false);
-      canvas.addEventListener('mousemove', scratch);
-      canvas.addEventListener('touchmove', e => { e.preventDefault(); scratch(e); });
+    // Wedding Card Functions
+    function openCardViewer() {
+      document.getElementById('card-viewer').style.display = 'flex';
+      $('#flipbook').turn({
+        width: 800,
+        height: 600,
+        autoCenter: true,
+        gradients: true, // Shadows for realism
+        acceleration: true // Smooth turning
+      });
     }
-
-    initScratch('c1');
-    initScratch('c2');
-    initScratch('c3');
+    function closeCardViewer() {
+      document.getElementById('card-viewer').style.display = 'none';
+    }
   </script>
 </body>
 </html>
